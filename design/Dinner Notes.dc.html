@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
+<style>
+body{margin:0;background:#F3F6F5;font-family:'Plus Jakarta Sans',system-ui,sans-serif;color:#14201D;-webkit-font-smoothing:antialiased}
+a{color:#0B7D71;text-decoration:none}a:hover{color:#14201D}
+textarea{font-family:inherit}
+</style>
+</helmet>
+<section style="padding:48px;display:flex;flex-direction:column;gap:24px">
+  <div style="display:flex;flex-direction:column;gap:8px">
+    <div style="font-size:28px;line-height:34px;font-weight:800">Dinner Notes</div>
+    <div style="font-size:13px;line-height:18px;font-weight:500;color:#56645F">Four core screens · iPhone 390 × 844 · chips, mic and draft controls are live</div>
+  </div>
+  <div style="display:flex;flex-wrap:wrap;gap:48px;align-items:flex-start">
+
+    <!-- 1 QUEUE -->
+    <div id="1a" style="display:flex;flex-direction:column;gap:12px">
+      <div style="display:flex;align-items:center;gap:8px"><span style="font-size:13px;font-weight:700;background:#14201D;color:#FFFFFF;border-radius:999px;padding:2px 10px">1a</span><span style="font-size:13px;font-weight:500;color:#56645F">Review queue</span></div>
+      <div data-screen-label="01 Review queue" style="width:390px;height:844px;background:#FFFFFF;border-radius:{{ frameRadius }};border:{{ frameBorder }};overflow:hidden;display:flex;flex-direction:column;box-sizing:border-box">
+        <div style="height:47px;flex:none;display:flex;align-items:center;padding:0 32px;font-size:15px;font-weight:600">9:41</div>
+        <div style="flex:1;overflow:hidden;padding:8px 16px 0;display:flex;flex-direction:column;gap:24px">
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:12px"><div style="font-size:28px;line-height:34px;font-weight:800">Your dinners</div><img src="alec.svg" alt="Alec" width="48" height="48" style="width:48px;height:48px;border-radius:999px;display:block"></div>
+            <div style="font-size:16px;line-height:24px;color:#56645F">1 to review, 1 draft ready to paste.</div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:12px">
+            <div style="background:#F3F6F5;border-radius:20px;padding:16px;display:flex;flex-direction:column;gap:16px">
+              <div style="display:flex;flex-direction:column;gap:8px;align-items:flex-start">
+                <span style="font-size:13px;line-height:18px;font-weight:600;color:#8F5C0E;background:#FFFFFF;border-radius:999px;padding:4px 10px">Needs review</span>
+                <div style="display:flex;flex-direction:column;gap:2px">
+                  <div style="font-size:20px;line-height:26px;font-weight:700">Lilia</div>
+                  <div style="font-size:13px;line-height:18px;font-weight:500;color:#56645F">Tonight · 7:30 PM · Williamsburg</div>
+                </div>
+              </div>
+              <div style="display:flex;gap:8px">
+                <button style="flex:1;height:52px;border:none;border-radius:999px;background:#0B7D71;color:#FFFFFF;font:600 16px/24px 'Plus Jakarta Sans',system-ui;cursor:pointer">Review now</button>
+                <button style="flex:none;height:52px;padding:0 20px;border:2px solid #E0E6E4;border-radius:999px;background:#FFFFFF;color:#14201D;font:600 16px/24px 'Plus Jakarta Sans',system-ui;cursor:pointer">Didn't go</button>
+              </div>
+            </div>
+            <div style="background:#F3F6F5;border-radius:20px;padding:16px;display:flex;flex-direction:column;gap:16px">
+              <div style="display:flex;flex-direction:column;gap:8px;align-items:flex-start">
+                <span style="font-size:13px;line-height:18px;font-weight:600;color:#14201D;background:#DDF2EE;border-radius:999px;padding:4px 10px">Draft ready</span>
+                <div style="display:flex;flex-direction:column;gap:2px">
+                  <div style="font-size:20px;line-height:26px;font-weight:700">Via Carota</div>
+                  <div style="font-size:13px;line-height:18px;font-weight:500;color:#56645F">Tue, Oct 6 · 8:00 PM</div>
+                </div>
+                <div style="font-size:16px;line-height:24px;color:#14201D;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">“Worth every minute of the wait. The cacio e pepe was silky and the bar seats felt like a little secret…”</div>
+              </div>
+              <button style="height:52px;border:2px solid #0B7D71;border-radius:999px;background:#FFFFFF;color:#0B7D71;font:600 16px/24px 'Plus Jakarta Sans',system-ui;display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer">
+                <svg width="24" height="24" viewBox="0 0 24 24" style="fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                Copy and open Beli
+              </button>
+            </div>
+            <div style="border-top:1px solid #E0E6E4;padding:16px 4px 0;display:flex;align-items:center;gap:12px">
+              <div style="width:44px;height:44px;border-radius:999px;background:#F3F6F5;color:#56645F;display:flex;align-items:center;justify-content:center;flex:none">
+                <svg width="24" height="24" viewBox="0 0 24 24" style="fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"><path d="M20 6L9 17l-5-5"></path></svg>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:2px">
+                <div style="font-size:16px;line-height:24px;font-weight:600;color:#56645F">Don Angie</div>
+                <div style="font-size:13px;line-height:18px;font-weight:500;color:#56645F">Posted to Beli · Sat, Oct 3</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div style="flex:none;padding:16px 16px 0;display:flex;flex-direction:column;gap:8px;align-items:stretch">
+          <button style="height:52px;border:2px solid #E0E6E4;border-radius:999px;background:#FFFFFF;color:#14201D;font:600 16px/24px 'Plus Jakarta Sans',system-ui;display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer">
+            <svg width="24" height="24" viewBox="0 0 24 24" style="fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"><path d="M12 5v14M5 12h14"></path></svg>
+            Add a meal
+          </button>
+          <div style="height:26px;display:flex;align-items:center;justify-content:center"><div style="width:134px;height:5px;border-radius:999px;background:#14201D"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2 CHIP QUESTION -->
+    <div id="1b" style="display:flex;flex-direction:column;gap:12px">
+      <div style="display:flex;align-items:center;gap:8px"><span style="font-size:13px;font-weight:700;background:#14201D;color:#FFFFFF;border-radius:999px;padding:2px 10px">1b</span><span style="font-size:13px;font-weight:500;color:#56645F">Chip question · step 2 of 7</span></div>
+      <div data-screen-label="02 Vibe question" style="width:390px;height:844px;background:#FFFFFF;border-radius:{{ frameRadius }};border:{{ frameBorder }};overflow:hidden;display:flex;flex-direction:column;box-sizing:border-box">
+        <div style="height:47px;flex:none;display:flex;align-items:center;padding:0 32px;font-size:15px;font-weight:600">9:41</div>
+        <div style="height:52px;flex:none;padding:0 8px;display:grid;grid-template-columns:72px 1fr 72px;align-items:center">
+          <button aria-label="Back" style="width:44px;height:44px;border:none;background:none;color:#14201D;display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0">
+            <svg width="24" height="24" viewBox="0 0 24 24" style="fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"><path d="M15 18l-6-6 6-6"></path></svg>
+          </button>
+          <div style="display:flex;justify-content:center;align-items:center;gap:6px" aria-label="Step 2 of 7">
+            <sc-for list="{{ dots }}" as="d" hint-placeholder-count="7"><div style="width:{{ d.w }};height:8px;border-radius:999px;background:{{ d.bg }}"></div></sc-for>
+          </div>
+          <a href="#1b" style="justify-self:end;height:44px;padding:0 8px;display:flex;align-items:center;font-size:16px;font-weight:600;color:#56645F">Skip</a>
+        </div>
+        <div style="flex:1;padding:24px 16px 0;display:flex;flex-direction:column;gap:24px">
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <div style="display:flex;align-items:center;gap:12px"><img src="alec.svg" alt="Alec" width="64" height="64" style="width:64px;height:64px;border-radius:999px;flex:none;display:block"><div style="display:flex;flex-direction:column"><span style="font-size:16px;line-height:24px;font-weight:700;color:#14201D">Alec</span><span style="font-size:13px;line-height:18px;font-weight:500;color:#56645F">Asking about Lilia, tonight</span></div></div>
+            <div style="font-size:28px;line-height:34px;font-weight:800">What was the vibe?</div>
+            <div style="font-size:16px;line-height:24px;color:#56645F">Pick as many as you like.</div>
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:12px;flex-direction:{{ chipDir }}">
+            <sc-for list="{{ vibes }}" as="c" hint-placeholder-count="5">
+              <button onClick="{{ c.toggle }}" aria-pressed="{{ c.on }}" style="height:48px;box-sizing:border-box;padding:0 20px;border-radius:999px;border:{{ c.border }};background:{{ c.bg }};color:#14201D;font:600 15px/20px 'Plus Jakarta Sans',system-ui;display:flex;align-items:center;justify-content:{{ chipJustify }};gap:8px;cursor:pointer">
+                <span>{{ c.label }}</span>
+                <sc-if value="{{ c.on }}" hint-placeholder-val="{{ false }}"><svg width="20" height="20" viewBox="0 0 24 24" style="fill:none;stroke:#0B7D71;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;flex:none"><path d="M20 6L9 17l-5-5"></path></svg></sc-if>
+              </button>
+            </sc-for>
+            <button style="height:48px;box-sizing:border-box;padding:0 20px 0 16px;border-radius:999px;border:2px dashed #56645F;background:#FFFFFF;color:#14201D;font:600 15px/20px 'Plus Jakarta Sans',system-ui;display:flex;align-items:center;gap:8px;cursor:pointer">
+              <svg width="20" height="20" viewBox="0 0 24 24" style="fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"><path d="M12 5v14M5 12h14"></path></svg>
+              Your own
+            </button>
+          </div>
+        </div>
+        <div style="flex:none;padding:16px 16px 0;display:flex;flex-direction:column;gap:8px">
+          <button style="height:52px;border:none;border-radius:999px;background:#0B7D71;color:#FFFFFF;font:600 16px/24px 'Plus Jakarta Sans',system-ui;cursor:pointer">{{ nextLabel }}</button>
+          <div style="height:26px;display:flex;align-items:center;justify-content:center"><div style="width:134px;height:5px;border-radius:999px;background:#14201D"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3 NOTES -->
+    <div id="1c" style="display:flex;flex-direction:column;gap:12px">
+      <div style="display:flex;align-items:center;gap:8px"><span style="font-size:13px;font-weight:700;background:#14201D;color:#FFFFFF;border-radius:999px;padding:2px 10px">1c</span><span style="font-size:13px;font-weight:500;color:#56645F">Notes</span></div>
+      <div data-screen-label="03 Notes" style="width:390px;height:844px;background:#FFFFFF;border-radius:{{ frameRadius }};border:{{ frameBorder }};overflow:hidden;display:flex;flex-direction:column;box-sizing:border-box">
+        <div style="height:47px;flex:none;display:flex;align-items:center;padding:0 32px;font-size:15px;font-weight:600">9:41</div>
+        <div style="height:52px;flex:none;padding:0 8px;display:grid;grid-template-columns:72px 1fr 72px;align-items:center">
+          <button aria-label="Back" style="width:44px;height:44px;border:none;background:none;color:#14201D;display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0">
+            <svg width="24" height="24" viewBox="0 0 24 24" style="fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"><path d="M15 18l-6-6 6-6"></path></svg>
+          </button>
+          <div style="text-align:center;font-size:13px;line-height:18px;font-weight:500;color:#56645F">Last step</div>
+          <span></span>
+        </div>
+        <div style="flex:1;padding:16px 16px 0;display:flex;flex-direction:column;gap:24px">
+          <div style="display:flex;flex-direction:column;gap:12px"><div style="display:flex;align-items:center;gap:12px"><img src="alec.svg" alt="Alec" width="64" height="64" style="width:64px;height:64px;border-radius:999px;flex:none;display:block"><div style="display:flex;flex-direction:column"><span style="font-size:16px;line-height:24px;font-weight:700;color:#14201D">Alec</span><span style="font-size:13px;line-height:18px;font-weight:500;color:#56645F">Last one, promise</span></div></div><div style="font-size:28px;line-height:34px;font-weight:800">Anything to remember?</div></div>
+          <textarea placeholder="Best dish? Anything you'd skip?" style="height:120px;box-sizing:border-box;resize:none;border:2px solid transparent;border-radius:10px;background:#F3F6F5;padding:12px 16px;font-size:16px;line-height:24px;color:#14201D;outline:none" style-focus="border-color:#0B7D71" defaultValue="{{ notes }}"></textarea>
+          <div style="display:flex;flex-direction:column;gap:12px">
+            <div style="font-size:13px;line-height:18px;font-weight:600;color:#56645F">Favorite dishes</div>
+            <div style="display:flex;flex-wrap:wrap;gap:8px">
+              <span style="height:48px;box-sizing:border-box;padding:0 16px 0 20px;border-radius:999px;border:2px solid #0B7D71;background:#DDF2EE;font:600 15px/20px 'Plus Jakarta Sans',system-ui;display:flex;align-items:center;gap:8px">Mafaldine<svg width="20" height="20" viewBox="0 0 24 24" style="fill:none;stroke:#0B7D71;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round"><path d="M20 6L9 17l-5-5"></path></svg></span>
+              <span style="height:48px;box-sizing:border-box;padding:0 16px 0 20px;border-radius:999px;border:2px solid #0B7D71;background:#DDF2EE;font:600 15px/20px 'Plus Jakarta Sans',system-ui;display:flex;align-items:center;gap:8px">Grilled clams<svg width="20" height="20" viewBox="0 0 24 24" style="fill:none;stroke:#0B7D71;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round"><path d="M20 6L9 17l-5-5"></path></svg></span>
+              <button style="height:48px;box-sizing:border-box;padding:0 20px 0 16px;border-radius:999px;border:2px dashed #56645F;background:#FFFFFF;color:#14201D;font:600 15px/20px 'Plus Jakarta Sans',system-ui;display:flex;align-items:center;gap:8px;cursor:pointer"><svg width="20" height="20" viewBox="0 0 24 24" style="fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"><path d="M12 5v14M5 12h14"></path></svg>Add dish</button>
+            </div>
+          </div>
+          <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px">
+            <button onClick="{{ toggleMic }}" aria-label="{{ micLabel }}" style="width:96px;height:96px;border-radius:999px;border:{{ micBorder }};box-sizing:border-box;background:{{ micBg }};color:{{ micColor }};display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0">
+              <svg width="36" height="36" viewBox="0 0 24 24" style="fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><path d="M12 19v3"></path></svg>
+            </button>
+            <div style="font-size:16px;line-height:24px;font-weight:600;color:#14201D">{{ micLabel }}</div>
+          </div>
+        </div>
+        <div style="flex:none;padding:16px 16px 0;display:flex;flex-direction:column;gap:8px">
+          <button style="height:52px;border:none;border-radius:999px;background:#14201D;color:#FFFFFF;font:600 16px/24px 'Plus Jakarta Sans',system-ui;cursor:pointer">Write my review</button>
+          <div style="height:26px;display:flex;align-items:center;justify-content:center"><div style="width:134px;height:5px;border-radius:999px;background:#14201D"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4 DRAFT -->
+    <div id="1d" style="display:flex;flex-direction:column;gap:12px">
+      <div style="display:flex;align-items:center;gap:8px"><span style="font-size:13px;font-weight:700;background:#14201D;color:#FFFFFF;border-radius:999px;padding:2px 10px">1d</span><span style="font-size:13px;font-weight:500;color:#56645F">Draft</span></div>
+      <div data-screen-label="04 Draft" style="width:390px;height:844px;background:#FFFFFF;border-radius:{{ frameRadius }};border:{{ frameBorder }};overflow:hidden;display:flex;flex-direction:column;box-sizing:border-box">
+        <div style="height:47px;flex:none;display:flex;align-items:center;padding:0 32px;font-size:15px;font-weight:600">9:41</div>
+        <div style="height:52px;flex:none;padding:0 8px;display:flex;justify-content:space-between;align-items:center">
+          <button aria-label="Back" style="width:44px;height:44px;border:none;background:none;color:#14201D;display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0">
+            <svg width="24" height="24" viewBox="0 0 24 24" style="fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"><path d="M15 18l-6-6 6-6"></path></svg>
+          </button>
+          <button aria-label="Close" style="width:44px;height:44px;border:none;background:none;color:#14201D;display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0">
+            <svg width="24" height="24" viewBox="0 0 24 24" style="fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"><path d="M18 6L6 18M6 6l12 12"></path></svg>
+          </button>
+        </div>
+        <div style="flex:1;min-height:0;padding:16px 16px 0;display:flex;flex-direction:column;gap:24px">
+          <div style="display:flex;flex-direction:column;gap:12px;align-items:flex-start">
+            <span style="height:32px;box-sizing:border-box;padding:0 12px 0 10px;border-radius:999px;background:#DDF2EE;color:#14201D;font-size:13px;line-height:18px;font-weight:600;display:flex;align-items:center;gap:6px"><svg width="16" height="16" viewBox="0 0 24 24" style="fill:none;stroke:#0B7D71;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round"><path d="M20 6L9 17l-5-5"></path></svg>Loved it</span>
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <div style="display:flex;align-items:center;gap:12px"><img src="alec.svg" alt="Alec" width="48" height="48" style="width:48px;height:48px;border-radius:999px;flex:none;display:block"><div style="display:flex;flex-direction:column"><span style="font-size:16px;line-height:24px;font-weight:700;color:#14201D">Alec</span><span style="font-size:13px;line-height:18px;font-weight:500;color:#56645F">Wrote this in your voice</span></div></div>
+              <div style="font-size:28px;line-height:34px;font-weight:800">Here's your draft</div>
+              <div style="font-size:13px;line-height:18px;font-weight:500;color:#56645F">Lilia · {{ wordCount }} words, in your voice</div>
+            </div>
+          </div>
+          <div style="background:#F3F6F5;border-radius:20px;padding:16px;font-size:16px;line-height:24px;color:#14201D;text-wrap:pretty;overflow:auto">{{ draft }}</div>
+          <div style="display:flex;gap:8px">
+            <sc-for list="{{ edits }}" as="e" hint-placeholder-count="3">
+              <button onClick="{{ e.run }}" style="flex:1;height:44px;border-radius:999px;border:2px solid #E0E6E4;background:#FFFFFF;color:#14201D;font:600 15px/20px 'Plus Jakarta Sans',system-ui;cursor:pointer">{{ e.label }}</button>
+            </sc-for>
+          </div>
+        </div>
+        <div style="flex:none;padding:16px 16px 0;display:flex;flex-direction:column;gap:4px">
+          <button onClick="{{ copy }}" style="height:52px;border:none;border-radius:999px;background:#0B7D71;color:#FFFFFF;font:600 16px/24px 'Plus Jakarta Sans',system-ui;display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer">
+            <sc-if value="{{ copied }}" hint-placeholder-val="{{ false }}">
+              <svg width="24" height="24" viewBox="0 0 24 24" style="fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"><path d="M20 6L9 17l-5-5"></path></svg>
+            </sc-if>
+            <sc-if value="{{ notCopied }}" hint-placeholder-val="{{ true }}">
+              <svg width="24" height="24" viewBox="0 0 24 24" style="fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+            </sc-if>
+            {{ copyLabel }}
+            <svg width="20" height="20" viewBox="0 0 24 24" style="fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><path d="M15 3h6v6"></path><path d="M10 14L21 3"></path></svg>
+          </button>
+          <button style="height:48px;border:none;background:none;color:#14201D;font:600 16px/24px 'Plus Jakarta Sans',system-ui;cursor:pointer">Save for later</button>
+          <div style="height:26px;display:flex;align-items:center;justify-content:center"><div style="width:134px;height:5px;border-radius:999px;background:#14201D"></div></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;showFrame&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;},&quot;chipLayout&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;wrap&quot;,&quot;stacked&quot;],&quot;default&quot;:&quot;wrap&quot;,&quot;tsType&quot;:&quot;'wrap'|'stacked'&quot;}}">
+const DRAFTS = {
+  short: "Lilia lived up to the hype. The mafaldine was the best pasta I've had all year. Cozy, a little romantic, pricey but worth it. Going back.",
+  base: "Lilia lived up to the hype. The mafaldine with pink peppercorn was the best pasta I've had all year, and the grilled clams were so good we almost ordered seconds. Cozy and a little romantic without feeling stuffy, and our server was genuinely warm. Pricey but worth it. Already planning the next visit.",
+  long: "Lilia lived up to the hype. The mafaldine with pink peppercorn was the best pasta I've had all year, and the grilled clams were so good we almost ordered seconds. Cozy and a little romantic without feeling stuffy. We sat near the open kitchen, which made it feel like a dinner party. Our server was genuinely warm and paced everything perfectly. Pricey but worth it for a date night. Ask for the corner table if you can. Already planning the next visit.",
+  redo: "Okay, Lilia is officially a favorite. That mafaldine? Unreal. The clams were a close second. It's cozy and low-lit in the best way, perfect for a date, and the service felt warm, never rushed. Not cheap, but I'd happily pay it again. Definitely going back."
+};
+const ORDER = ['short', 'base', 'long'];
+class Component extends DCLogic {
+  state = { vibes: { Cozy: true, Lively: false, Romantic: true, Casual: false, Loud: false }, mic: false, len: 'base', copied: false };
+  toggleVibe(k) { this.setState(s => ({ vibes: { ...s.vibes, [k]: !s.vibes[k] } })); }
+  step(d) { this.setState(s => { const i = Math.max(0, ORDER.indexOf(s.len === 'redo' ? 'base' : s.len)); return { len: ORDER[Math.min(2, Math.max(0, i + d))], copied: false }; }); }
+  renderVals() {
+    const p = this.props, s = this.state;
+    const frame = p.showFrame ?? true;
+    const stacked = (p.chipLayout ?? 'wrap') === 'stacked';
+    const sel = Object.values(s.vibes).filter(Boolean).length;
+    const draft = DRAFTS[s.len];
+    return {
+      frameRadius: frame ? '44px' : '0px',
+      frameBorder: frame ? '1px solid #E0E6E4' : 'none',
+      dots: Array.from({ length: 7 }, (_, i) => ({ w: i === 1 ? '24px' : '8px', bg: i === 1 ? '#0B7D71' : i < 1 ? '#56645F' : '#E0E6E4' })),
+      chipDir: stacked ? 'column' : 'row',
+      chipJustify: stacked ? 'space-between' : 'center',
+      vibes: Object.keys(s.vibes).map(k => ({
+        label: k, on: s.vibes[k],
+        bg: s.vibes[k] ? '#DDF2EE' : '#F3F6F5',
+        border: s.vibes[k] ? '2px solid #0B7D71' : '2px solid #F3F6F5',
+        toggle: () => this.toggleVibe(k)
+      })),
+      nextLabel: sel ? 'Next' : 'Next',
+      notes: "Pasta was unreal. Corner table by the kitchen next time. Skip the dessert.",
+      toggleMic: () => this.setState(st => ({ mic: !st.mic })),
+      micLabel: s.mic ? 'Listening… tap to stop' : 'Tap to talk',
+      micBg: s.mic ? '#DDF2EE' : '#0B7D71',
+      micColor: s.mic ? '#0B7D71' : '#FFFFFF',
+      micBorder: s.mic ? '2px solid #0B7D71' : 'none',
+      draft, wordCount: draft.split(/\s+/).length,
+      edits: [
+        { label: 'Shorter', run: () => this.step(-1) },
+        { label: 'Longer', run: () => this.step(1) },
+        { label: 'Redo', run: () => this.setState(st => ({ len: st.len === 'redo' ? 'base' : 'redo', copied: false })) }
+      ],
+      copy: () => { navigator.clipboard?.writeText(draft).catch(() => {}); this.setState({ copied: true }); },
+      copied: s.copied, notCopied: !s.copied,
+      copyLabel: s.copied ? 'Copied. Opening Beli' : 'Copy and open Beli'
+    };
+  }
+}
+</script>
+</body>
+</html>

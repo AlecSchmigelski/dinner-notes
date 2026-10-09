@@ -1,0 +1,30 @@
+name = "dinner-notes"
+main = "src/index.js"
+compatibility_date = "2026-09-01"
+compatibility_flags = ["nodejs_compat"]
+
+# Re-read the calendar and send "How was it?" notifications.
+[triggers]
+crons = ["*/15 * * * *"]
+
+# Dinners found on the calendar and the phones to notify.
+# Create with `npx wrangler kv namespace create STORE` and paste the id here.
+[[kv_namespaces]]
+binding = "STORE"
+id = "REPLACE_WITH_KV_NAMESPACE_ID"
+
+[vars]
+# Where the web app is served from. Localhost is always allowed for dev.
+ALLOWED_ORIGINS = "https://alecschmigelski.github.io"
+# Used for calendar times that carry no time zone.
+DEFAULT_TZ = "America/New_York"
+# From `npm run vapid`. Public by design: the browser needs it to subscribe.
+VAPID_PUBLIC_KEY = ""
+
+# Secrets — set with `npx wrangler secret put <NAME>`, never commit them:
+#   ANTHROPIC_API_KEY
+#   APP_PASSCODE
+#   CALENDAR_URL        the iCloud "Public Calendar" share link (webcal://…)
+#   VAPID_PRIVATE_JWK   from `npm run vapid`
+#   VAPID_SUBJECT       "mailto:you@…", a contact for Apple's and Google's push
+#                       services (a secret only to keep the address out of the repo)
