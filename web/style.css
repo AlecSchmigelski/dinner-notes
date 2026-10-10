@@ -200,3 +200,36 @@ input.field-box { height: 52px; padding: 0 16px; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
 }
+
+/* ---------- home: quick start, coming up, taste ---------- */
+.quick-row { display: flex; gap: 8px; }
+.quick-row .field-box { flex: 1; min-width: 0; }
+.field-box.on-card { background: var(--surface); }
+.list { display: flex; flex-direction: column; }
+.list-row { display: flex; align-items: center; gap: 12px; padding: 8px 0; }
+.list-row + .list-row { border-top: 1px solid var(--line); }
+.list-row .stack-2 { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.list-row .nm { font-weight: 600; }
+.date-tile {
+  width: 48px; height: 48px; flex: none; border-radius: 10px;
+  background: var(--brand-tint); color: var(--ink);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  line-height: 1;
+}
+.date-tile span { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; color: var(--brand); }
+.date-tile b { font-size: 20px; font-weight: 800; margin-top: 2px; }
+.stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.stat { background: var(--surface-2); border-radius: 20px; padding: 12px 16px; display: flex; flex-direction: column; gap: 2px; }
+.stat b { font-size: 28px; line-height: 34px; font-weight: 800; }
+.pills { display: flex; flex-wrap: wrap; gap: 8px; }
+.pill-static { height: 36px; padding: 0 14px; border-radius: 999px; background: var(--surface-2); font-size: 15px; line-height: 36px; font-weight: 600; }
+.how { gap: 12px; }
+.steps { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+.steps li { display: flex; gap: 12px; align-items: flex-start; }
+.steps .num {
+  width: 28px; height: 28px; flex: none; border-radius: 999px;
+  background: var(--surface); color: var(--brand);
+  font-size: 15px; font-weight: 800; line-height: 28px; text-align: center;
+}
+.cal-status { display: flex; align-items: center; justify-content: center; gap: 6px; margin: 0; font-size: 13px; line-height: 18px; font-weight: 500; color: var(--ink-muted); }
+.cal-status svg { stroke: var(--brand); }

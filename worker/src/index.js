@@ -10,6 +10,7 @@ import { sendPush } from "./push.js";
 // plus a cron that re-reads the calendar and sends those notifications.
 
 const LOOKBACK_DAYS = 7; // older dinners are too stale to ask about
+const LOOKAHEAD_DAYS = 14; // upcoming reservations shown on the home screen
 const ASK_AFTER_MIN = 30; // minutes after a reservation ends
 const ASK_WITHIN_H = 6; // after this, skip the notification; it still shows in the app
 
@@ -116,7 +117,7 @@ async function syncDinners(env) {
   const now = Date.now();
   const events = parseEvents(await fetchCalendar(env.CALENDAR_URL), env.DEFAULT_TZ);
   const dinners = findDinners(events)
-    .filter((d) => Date.parse(d.datetime) > now - LOOKBACK_DAYS * 864e5 && Date.parse(d.datetime) < now + 2 * 864e5)
+    .filter((d) => Date.parse(d.datetime) > now - LOOKBACK_DAYS * 864e5 && Date.parse(d.datetime) < now + LOOKAHEAD_DAYS * 864e5)
     .map((d) => ({ ...d, notified: notified.has(d.id) }));
   await env.STORE.put("dinners", JSON.stringify(dinners));
   await env.STORE.put("syncedAt", String(now));
@@ -153,19 +154,31 @@ async function notifyFinished(env, dinners) {
 }
 
 async function handleDinners(env, headers) {
-  if (!env.CALENDAR_URL) return json({ dinners: [], vapidPublicKey: env.VAPID_PUBLIC_KEY || "" }, 200, headers);
+  const base = { vapidPublicKey: env.VAPID_PUBLIC_KEY || "", calendar: Boolean(env.CALENDAR_URL) };
+  if (!env.CALENDAR_URL) return json({ ...base, dinners: [], upcoming: [], syncedAt: null }, 200, headers);
   let dinners = await readStore(env, "dinners", []);
-  const syncedAt = Number(await env.STORE.get("syncedAt")) || 0;
+  let syncedAt = Number(await env.STORE.get("syncedAt")) || 0;
   if (Date.now() - syncedAt > 10 * 60e3) {
     try {
       dinners = await syncDinners(env);
+      syncedAt = Date.now();
     } catch {
       // Serve the last good copy if iCloud is slow or down.
     }
   }
-  // Only dinners that have started: you can't review a meal you haven't had.
-  const started = dinners.filter((d) => Date.parse(d.datetime) <= Date.now()).map(({ notified, ...d }) => d);
-  return json({ dinners: started, vapidPublicKey: env.VAPID_PUBLIC_KEY || "" }, 200, headers);
+  const now = Date.now();
+  const strip = ({ notified, ...d }) => d;
+  return json(
+    {
+      ...base,
+      // Started dinners are ready to review; later ones are shown as coming up.
+      dinners: dinners.filter((d) => Date.parse(d.datetime) <= now).map(strip),
+      upcoming: dinners.filter((d) => Date.parse(d.datetime) > now).map(strip),
+      syncedAt: syncedAt ? new Date(syncedAt).toISOString() : null,
+    },
+    200,
+    headers,
+  );
 }
 
 async function handleSubscribe(request, env, headers) {

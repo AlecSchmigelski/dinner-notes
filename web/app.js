@@ -54,6 +54,19 @@ function cleanDinner(d) {
   };
 }
 
+// What the server last said about her calendar. `connected` is null until
+// the first successful sync, so the home screen doesn't claim either way.
+function cleanCalendar(c) {
+  const ok = c && typeof c === "object";
+  return {
+    connected: ok && typeof c.connected === "boolean" ? c.connected : null,
+    syncedAt: ok && typeof c.syncedAt === "string" ? c.syncedAt : null,
+    upcoming: ok && Array.isArray(c.upcoming)
+      ? c.upcoming.filter((u) => u && typeof u.restaurant === "string" && typeof u.datetime === "string")
+      : [],
+  };
+}
+
 function load() {
   try {
     const s = JSON.parse(localStorage.getItem(KEY)) || {};
@@ -61,9 +74,10 @@ function load() {
       settings: s.settings && typeof s.settings === "object" ? s.settings : {},
       dinners: Array.isArray(s.dinners) ? s.dinners.map(cleanDinner).filter(Boolean) : [],
       route: s.route && typeof s.route === "object" ? s.route : { name: "queue" },
+      calendar: cleanCalendar(s.calendar),
     };
   } catch {
-    return { settings: {}, dinners: [], route: { name: "queue" } };
+    return { settings: {}, dinners: [], route: { name: "queue" }, calendar: cleanCalendar() };
   }
 }
 
@@ -154,22 +168,47 @@ function go(route) {
 }
 
 // ---------- screens ----------
+function ago(iso) {
+  const min = Math.round((Date.now() - Date.parse(iso)) / 60e3);
+  if (!Number.isFinite(min)) return "";
+  if (min < 1) return "just now";
+  if (min < 60) return `${min} min ago`;
+  const h = Math.round(min / 60);
+  return h < 24 ? `${h} hr ago` : `${Math.round(h / 24)} days ago`;
+}
+
+// Most frequent strings across lists, most common first.
+function mostCommon(lists, n) {
+  const counts = new Map();
+  for (const list of lists) for (const x of list) counts.set(x, (counts.get(x) || 0) + 1);
+  return [...counts.entries()].sort((a, b) => b[1] - a[1]).slice(0, n).map(([x]) => x);
+}
+
 function screenQueue() {
   const by = (s) => state.dinners.filter((d) => d.status === s);
   const review = by("needs_review").sort((a, b) => b.datetime.localeCompare(a.datetime));
   const drafts = by("draft_ready").sort((a, b) => b.datetime.localeCompare(a.datetime));
-  const done = by("done").sort((a, b) => String(b.doneAt).localeCompare(String(a.doneAt))).slice(0, 10);
+  const done = by("done").sort((a, b) => String(b.doneAt).localeCompare(String(a.doneAt)));
+  const reviewed = [...drafts, ...done];
+  const now = Date.now();
+  const upcoming = state.calendar.upcoming
+    .filter((u) => Date.parse(u.datetime) > now)
+    .sort((a, b) => a.datetime.localeCompare(b.datetime))
+    .slice(0, 3);
 
   const bits = [];
   if (review.length) bits.push(`${review.length} to review`);
   if (drafts.length) bits.push(`${drafts.length} ${drafts.length === 1 ? "draft" : "drafts"} ready to paste`);
   const summary = bits.length
     ? `${bits.join(", ")}.`
-    : done.length
-      ? "All caught up."
-      : "Add a meal after you eat and I'll help you write it up.";
+    : upcoming.length
+      ? `Nothing to review yet. Next up: ${upcoming[0].restaurant}, ${dayLabel(upcoming[0].datetime).replace(/^(Today|Tonight)$/, (m) => m.toLowerCase())}.`
+      : reviewed.length
+        ? "All caught up."
+        : "Alec will ask about each meal after you eat.";
 
-  // Only one solid brand button per screen: the newest dinner to review gets it.
+  // Only one solid brand button per screen. The newest dinner to review gets
+  // it; otherwise the quick-start card does.
   const reviewCards = review
     .map(
       (d, i) => `
@@ -206,7 +245,72 @@ function screenQueue() {
     )
     .join("");
 
+  const quick = `
+    <form class="card" id="quick-form">
+      <div class="stack-2">
+        <h2 class="title">Just ate somewhere?</h2>
+        <p class="caption">Tell Alec while it's fresh.</p>
+      </div>
+      <div class="quick-row">
+        <input class="field-box on-card" name="restaurant" placeholder="Restaurant name" autocomplete="off" autocapitalize="words" enterkeyhint="go" aria-label="Restaurant name">
+        <button class="btn btn-auto ${review.length ? "btn-ink" : "btn-primary"}" type="submit">Start</button>
+      </div>
+    </form>`;
+
+  const comingUp = upcoming.length
+    ? `
+    <section class="stack-12">
+      <p class="label">Coming up</p>
+      <div class="list">
+        ${upcoming
+          .map((u) => {
+            const d = new Date(u.datetime);
+            return `
+          <div class="list-row">
+            <div class="date-tile"><span>${esc(d.toLocaleDateString(undefined, { month: "short" }))}</span><b>${d.getDate()}</b></div>
+            <div class="stack-2">
+              <span class="nm">${esc(u.restaurant)}</span>
+              <span class="caption">${esc(`${d.toLocaleDateString(undefined, { weekday: "short" })} · ${time(d)} · Alec will ask after`)}</span>
+            </div>
+          </div>`;
+          })
+          .join("")}
+      </div>
+    </section>`
+    : "";
+
+  let taste;
+  if (reviewed.length) {
+    const loved = reviewed.filter((d) => d.answers.overall === "Loved it");
+    const again = reviewed.filter((d) => d.answers.goBack === "Definitely");
+    const vibes = mostCommon(reviewed.map((d) => d.answers.vibe), 6);
+    const dishes = mostCommon((loved.length ? loved : reviewed).map((d) => d.dishes), 6);
+    const pills = (xs) => `<div class="pills">${xs.map((x) => `<span class="pill-static">${esc(x)}</span>`).join("")}</div>`;
+    taste = `
+    <section class="stack-12">
+      <p class="label">Your taste</p>
+      <div class="stats">
+        <div class="stat"><b>${reviewed.length}</b><span class="caption">Reviewed</span></div>
+        <div class="stat"><b>${loved.length}</b><span class="caption">Loved</span></div>
+        <div class="stat"><b>${again.length}</b><span class="caption">Going back</span></div>
+      </div>
+      ${vibes.length ? `<div class="stack-8"><p class="caption">Vibes you go for</p>${pills(vibes)}</div>` : ""}
+      ${dishes.length ? `<div class="stack-8"><p class="caption">Dishes you loved</p>${pills(dishes)}</div>` : ""}
+    </section>`;
+  } else {
+    taste = `
+    <section class="card how">
+      <h2 class="title">How it works</h2>
+      <ol class="steps">
+        <li><span class="num">1</span><span>Book on Resy or OpenTable, or put "Dinner at …" on your calendar.</span></li>
+        <li><span class="num">2</span><span>About 30 minutes after, Alec asks how it was. A few taps, plus a voice note if you like.</span></li>
+        <li><span class="num">3</span><span>He writes the review in your voice. Copy it into Beli.</span></li>
+      </ol>
+    </section>`;
+  }
+
   const doneRows = done
+    .slice(0, 5)
     .map(
       (d) => `
       <div class="done-row">
@@ -219,7 +323,15 @@ function screenQueue() {
     )
     .join("");
 
-  const any = review.length || drafts.length || done.length;
+  const cal = state.calendar;
+  const status = demo || (cal.connected && cal.syncedAt)
+    ? `${icon("check", "i-16")}Calendar connected · checked ${ago(demo ? new Date().toISOString() : cal.syncedAt)}`
+    : cal.connected === false
+      ? "No calendar connected yet."
+      : !connected()
+        ? "Tap Alec to connect the server."
+        : "";
+
   return `
     <div class="screen">
       <div class="content home">
@@ -230,7 +342,12 @@ function screenQueue() {
           </div>
           <p class="body muted">${esc(summary)}</p>
         </div>
-        ${any ? `<div class="cards">${reviewCards}${draftCards}${doneRows}</div>` : ""}
+        ${review.length || drafts.length ? `<div class="cards">${reviewCards}${draftCards}</div>` : ""}
+        ${quick}
+        ${comingUp}
+        ${taste}
+        ${doneRows ? `<section class="stack-12"><p class="label">Recently posted</p><div>${doneRows}</div></section>` : ""}
+        ${status ? `<p class="cal-status">${status}</p>` : ""}
       </div>
       <div class="actions">
         <button class="btn btn-secondary" data-act="add">${icon("plus")}Add a meal</button>
@@ -786,7 +903,13 @@ document.getElementById("app").addEventListener("click", (e) => {
 document.getElementById("app").addEventListener("submit", (e) => {
   e.preventDefault();
   const f = new FormData(e.target);
-  if (e.target.id === "add-form") {
+  if (e.target.id === "quick-form") {
+    const restaurant = String(f.get("restaurant") || "").trim();
+    if (!restaurant) return e.target.querySelector("input").focus();
+    const d = cleanDinner({ id: uid(), restaurant, datetime: new Date().toISOString(), status: "needs_review" });
+    state.dinners.push(d);
+    go({ name: "question", id: d.id, step: 0 });
+  } else if (e.target.id === "add-form") {
     const restaurant = String(f.get("restaurant") || "").trim();
     if (!restaurant) return;
     const when = f.get("when") ? new Date(f.get("when")) : new Date();
@@ -827,6 +950,9 @@ async function syncDinners() {
     if (!res.ok) return;
     const body = await res.json();
     vapidPublicKey = body.vapidPublicKey || "";
+    const before = JSON.stringify(state.calendar);
+    state.calendar = cleanCalendar({ connected: Boolean(body.calendar), syncedAt: body.syncedAt, upcoming: body.upcoming });
+    const calendarChanged = JSON.stringify(state.calendar) !== before;
     let added = 0;
     for (const found of Array.isArray(body.dinners) ? body.dinners : []) {
       if (dinner(found.id)) continue;
@@ -836,8 +962,8 @@ async function syncDinners() {
         added++;
       }
     }
-    if (added) save();
-    if (added && (state.route.name === "queue" || state.route.name === "settings")) render();
+    if (added || calendarChanged) save();
+    if ((added || calendarChanged) && (state.route.name === "queue" || state.route.name === "settings")) render();
   } catch {
     // Offline: the queue still works with what's saved.
   }
@@ -918,9 +1044,14 @@ if (demo && !state.dinners.length) {
   };
   state.dinners = [
     { id: "lilia", restaurant: "Lilia", neighborhood: "Williamsburg", datetime: at(0, 19, 30), status: "needs_review", notes: "Pasta was unreal. Corner table by the kitchen next time. Skip the dessert.", dishes: ["Mafaldine", "Grilled clams"] },
-    { id: "via-carota", restaurant: "Via Carota", datetime: at(3, 20, 0), status: "draft_ready", answers: { overall: "Loved it" }, draft: "Worth every minute of the wait. The cacio e pepe was silky and the bar seats felt like a little secret. Cozy, buzzy and somehow still relaxed. Get the insalata verde even if it sounds boring." },
-    { id: "don-angie", restaurant: "Don Angie", datetime: at(6, 19, 0), status: "done", doneAt: at(6, 22, 15) },
+    { id: "via-carota", restaurant: "Via Carota", datetime: at(3, 20, 0), status: "draft_ready", answers: { overall: "Loved it", vibe: ["Cozy", "Lively"], goBack: "Definitely" }, dishes: ["Cacio e pepe", "Insalata verde"], draft: "Worth every minute of the wait. The cacio e pepe was silky and the bar seats felt like a little secret. Cozy, buzzy and somehow still relaxed. Get the insalata verde even if it sounds boring." },
+    { id: "don-angie", restaurant: "Don Angie", datetime: at(6, 19, 0), status: "done", doneAt: at(6, 22, 15), answers: { overall: "Loved it", vibe: ["Lively", "Romantic"], goBack: "Definitely" }, dishes: ["Pinwheel lasagna"] },
+    { id: "misi", restaurant: "Misi", datetime: at(12, 20, 30), status: "done", doneAt: at(12, 23, 0), answers: { overall: "It was fine", vibe: ["Cozy"], goBack: "Maybe" }, dishes: ["Sweet pepper agnolotti"] },
   ].map(cleanDinner);
+  const soon = new Date();
+  soon.setDate(soon.getDate() + 2);
+  soon.setHours(20, 0, 0, 0);
+  state.calendar = cleanCalendar({ connected: true, syncedAt: new Date().toISOString(), upcoming: [{ id: "cal-demo-rezdora", restaurant: "Rezdôra", datetime: soon.toISOString() }] });
   save();
 }
 
