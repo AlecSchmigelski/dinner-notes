@@ -60,34 +60,44 @@ if (toml.includes("REPLACE_WITH_KV_NAMESPACE_ID")) {
   console.log("Created.");
 } else console.log("Already set up.");
 
+// What's already stored. Empty before the first successful deploy.
+function secretNames() {
+  const listed = capture(["secret", "list", "--format", "json"]);
+  try {
+    return JSON.parse(listed.out.slice(listed.out.indexOf("["))).map((s) => s.name);
+  } catch {
+    return [];
+  }
+}
+let have = secretNames();
+
 step(3, "Notification keys");
+// The private half is only kept as a secret, so if it was never saved (say a
+// previous run stopped at deploy), make a fresh pair rather than guess.
 let newPrivateKey = null;
-if (/VAPID_PUBLIC_KEY = ""/.test(toml)) {
+if (!have.includes("VAPID_PRIVATE_JWK")) {
   const { publicKey, privateKey } = await crypto.subtle.generateKey({ name: "ECDSA", namedCurve: "P-256" }, true, ["sign", "verify"]);
   const pub = b64url(await crypto.subtle.exportKey("raw", publicKey));
   newPrivateKey = JSON.stringify(await crypto.subtle.exportKey("jwk", privateKey));
-  toml = toml.replace('VAPID_PUBLIC_KEY = ""', `VAPID_PUBLIC_KEY = "${pub}"`);
+  toml = toml.replace(/VAPID_PUBLIC_KEY = "[^"]*"/, `VAPID_PUBLIC_KEY = "${pub}"`);
   writeFileSync(TOML, toml);
   console.log("Generated.");
 } else console.log("Already set up.");
 
 step(4, "Deploy the server");
-const deploy = spawnSync("npx", ["wrangler", "deploy"], { encoding: "utf8", stdio: ["inherit", "pipe", "inherit"] });
+const deploy = spawnSync("npx", ["wrangler", "deploy"], { encoding: "utf8", stdio: ["inherit", "pipe", "pipe"] });
 process.stdout.write(deploy.stdout || "");
+process.stderr.write(deploy.stderr || "");
 const url = /https:\/\/[\w.-]+\.workers\.dev/.exec(deploy.stdout || "")?.[0];
 if (deploy.status !== 0 || !url) {
-  console.error("Deploy failed. Fix the error above and run `npm run setup` again.");
+  if (/workers\.dev subdomain/.test(deploy.stdout + (deploy.stderr || ""))) {
+    console.error("\nCloudflare needs a workers.dev subdomain first. Open Workers & Pages in the dashboard, pick a subdomain, then run `npm run setup` again.");
+  } else console.error("Deploy failed. Fix the error above and run `npm run setup` again.");
   process.exit(1);
 }
 
 step(5, "Secrets (never stored in the repo)");
-const listed = capture(["secret", "list", "--format", "json"]);
-let have = [];
-try {
-  have = JSON.parse(listed.out.slice(listed.out.indexOf("["))).map((s) => s.name);
-} catch {
-  // First run: nothing set yet.
-}
+have = secretNames();
 const put = (name, value) => {
   if (!wrangler(["secret", "put", name], { input: value, quiet: true }).ok) {
     console.error(`Couldn't save ${name}. Run \`npm run setup\` again.`);
@@ -96,13 +106,7 @@ const put = (name, value) => {
   console.log(`  saved ${name}`);
 };
 
-if (newPrivateKey || !have.includes("VAPID_PRIVATE_JWK")) {
-  if (!newPrivateKey) {
-    console.error("The notification private key is missing. Clear VAPID_PUBLIC_KEY in wrangler.toml and re-run.");
-    process.exit(1);
-  }
-  put("VAPID_PRIVATE_JWK", newPrivateKey);
-}
+if (newPrivateKey) put("VAPID_PRIVATE_JWK", newPrivateKey);
 const prompts = [
   ["VAPID_SUBJECT", "Your email (Apple and Google's contact for notifications): ", (v) => (v.startsWith("mailto:") ? v : `mailto:${v}`)],
   ["CALENDAR_URL", "Calendar share link (starts with webcal://): ", (v) => v],
