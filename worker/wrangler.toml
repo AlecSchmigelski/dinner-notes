@@ -11,7 +11,7 @@ crons = ["*/15 * * * *"]
 # Create with `npx wrangler kv namespace create STORE` and paste the id here.
 [[kv_namespaces]]
 binding = "STORE"
-id = "REPLACE_WITH_KV_NAMESPACE_ID"
+id = "b3fc663756a448ad9874753acd112929"
 
 [vars]
 # Where the web app is served from. Localhost is always allowed for dev.
@@ -19,7 +19,7 @@ ALLOWED_ORIGINS = "https://alecschmigelski.github.io"
 # Used for calendar times that carry no time zone.
 DEFAULT_TZ = "America/New_York"
 # From `npm run vapid`. Public by design: the browser needs it to subscribe.
-VAPID_PUBLIC_KEY = ""
+VAPID_PUBLIC_KEY = "BGMNR6cicogrpPJ1f6MflqM9agt5dFEKd2nA8whvaygsqPh4kaIqFCUS2hH0QbERBc0GtsQynTVvYheVTHuSSQs"
 
 # Secrets — set with `npx wrangler secret put <NAME>`, never commit them:
 #   ANTHROPIC_API_KEY
