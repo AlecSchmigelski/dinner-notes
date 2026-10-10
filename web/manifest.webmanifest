@@ -1,6 +1,6 @@
 {
-  "name": "Dinner Notes",
-  "short_name": "Dinner Notes",
+  "name": "Aftertaste",
+  "short_name": "Aftertaste",
   "description": "A few taps after dinner, a review in your voice for Beli.",
   "start_url": "./",
   "scope": "./",

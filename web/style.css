@@ -1,4 +1,4 @@
-/* Dinner Notes. Tokens and component specs come from the design handoff
+/* Aftertaste. Tokens and component specs come from the design handoff
    (design/README.md). Rules worth keeping: no shadows, no gradients, no emoji,
    and at most one solid brand element per screen. */
 
@@ -136,7 +136,15 @@ svg.check { stroke: var(--brand); stroke-width: 2.5; }
 .dots span.now { width: 24px; background: var(--brand); }
 
 /* ---------- queue ---------- */
-.home-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.home-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: -8px; }
+.brand { display: flex; align-items: center; gap: 10px; }
+.brand-mark {
+  width: 36px; height: 36px; border-radius: 10px; flex: none;
+  background: var(--brand-tint); color: var(--brand);
+  display: flex; align-items: center; justify-content: center;
+}
+.brand-mark svg { width: 24px; height: 24px; }
+.brand-name { font-size: 20px; line-height: 26px; font-weight: 800; letter-spacing: -0.01em; }
 .cards { display: flex; flex-direction: column; gap: 12px; }
 .card { background: var(--surface-2); border-radius: 20px; padding: 16px; display: flex; flex-direction: column; gap: 16px; }
 .card .info { display: flex; flex-direction: column; gap: 8px; align-items: flex-start; text-align: left; width: 100%; }
