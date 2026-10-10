@@ -103,8 +103,6 @@ const ICONS = {
   copy: '<rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>',
   external: '<path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><path d="M15 3h6v6"/><path d="M10 14L21 3"/>',
   check: '<path d="M20 6L9 17l-5-5"/>',
-  // The Aftertaste mark: a plate between a fork and a knife.
-  logo: '<circle cx="12" cy="12" r="5.5"/><path d="M3.5 4v16M2 4v3.5a1.5 1.5 0 0 0 3 0V4"/><path d="M20.5 20V4c-1.6 1-2.3 3.2-2.3 6.5h2.3"/>',
   plus: '<path d="M12 5v14M5 12h14"/>',
 };
 const icon = (name, cls = "") => `<svg class="i ${cls}" viewBox="0 0 24 24" aria-hidden="true">${ICONS[name]}</svg>`;
@@ -339,7 +337,7 @@ function screenQueue() {
       <div class="content home">
         <div class="home-head">
           <div class="brand">
-            <span class="brand-mark">${icon("logo")}</span>
+            <img class="brand-mark" src="./logo.svg" alt="" width="32" height="32">
             <span class="brand-name">Aftertaste</span>
           </div>
           <button class="avatar-btn" data-act="settings" aria-label="Settings">${avatar(48)}</button>
