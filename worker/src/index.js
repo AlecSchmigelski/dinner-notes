@@ -227,8 +227,13 @@ async function handleDraft(request, env, headers) {
     if (!draft) return json({ error: "Came back empty. Try again." }, 502, headers);
     return json({ draft }, 200, headers);
   } catch (error) {
+    // Shows up in `npx wrangler tail` and the Cloudflare dashboard logs.
+    console.error("draft failed", error?.status, error?.message);
     if (error instanceof Anthropic.RateLimitError) {
       return json({ error: "Busy right now. Try again in a minute." }, 429, headers);
+    }
+    if (error instanceof Anthropic.BadRequestError && /credit balance/i.test(error.message)) {
+      return json({ error: "The Anthropic account is out of credit. Add some at console.anthropic.com under Billing." }, 402, headers);
     }
     if (error instanceof Anthropic.AuthenticationError) {
       return json({ error: "The server's API key is wrong." }, 500, headers);
